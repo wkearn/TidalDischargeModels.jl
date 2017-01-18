@@ -11,8 +11,8 @@ _DATA_DIR = Databases._METDATA_DIR
 doy(t::DateTime) = dayofyear(t) + (hour(t)+minute(t)/60)/24
 
 function doy2date(y,d)
-    md = Base.Dates.MONTHDAYS[:]
-    ms = 1:12
+    md = [Base.Dates.MONTHDAYS[:];365]
+    ms = 1:13
     if isleapyear(y)
         md[ms.>2]+=1
     end
