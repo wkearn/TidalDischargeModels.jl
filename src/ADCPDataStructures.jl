@@ -14,6 +14,10 @@ type ADCPData
     p::Vector{Float64}
     v::Array{Float64,3}
     t::Vector{DateTime}
+    temp::Vector{Float64}
+    pitch::Vector{Float64}
+    roll::Vector{Float64}
+    heading::Vector{Float64}
     a1::Nullable{Vector{Float64}}
     a2::Nullable{Vector{Float64}}    
 end
@@ -27,6 +31,10 @@ deployment(data::ADCPData) = data.dep
 pressures(data::ADCPData) = data.p
 velocities(data::ADCPData) = data.v
 times(data::ADCPData) = data.t
+temperatures(data::ADCPData) = data.temp
+pitches(data::ADCPData) = data.pitch
+rolls(data::ADCPData) = data.roll
+headings(data::ADCPData) = data.heading
 analog(data::ADCPData) = (get(data.a1,[]),get(data.a2,[]))
 
 type CalibrationData
@@ -67,6 +75,10 @@ function load_data(dep::Deployment)
     v = reshape_velocities(v,dep)
     t = vec(readdlm(joinpath(data_dir,"times.csv")))
     t = DateTime.(t)
+    temp = vec(readdlm(joinpath(data_dir,"temperature.csv")))
+    pitch= vec(readdlm(joinpath(data_dir,"pitch.csv")))
+    roll = vec(readdlm(joinpath(data_dir,"roll.csv")))
+    heading = vec(readdlm(joinpath(data_dir,"heading.csv")))
     if dep.adcp.hasAnalog
         a1 = vec(readdlm(joinpath(data_dir,"analog1.csv")))
         a2 = vec(readdlm(joinpath(data_dir,"analog2.csv")))
@@ -74,7 +86,7 @@ function load_data(dep::Deployment)
         a1 = Nullable{Vector{Float64}}()
         a2 = Nullable{Vector{Float64}}()
     end
-    ADCPData(dep,p,v,t,a1,a2)
+    ADCPData(dep,p,v,t,temp,pitch,roll,heading,a1,a2)
 end
 
 function load_data(cal::Calibration,load_dep=false)
