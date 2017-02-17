@@ -61,7 +61,7 @@ function load_data(dep::Deployment)
     data_dir = joinpath(_DATABASE_DIR,
                         string(dep.location),
                         "deployments",
-                        hex(hash(dep)))
+                        hex(hash(dep),16))
     p = vec(readdlm(joinpath(data_dir,"pressure.csv")))
     v = vec(readdlm(joinpath(data_dir,"velocities.csv")))
     v = reshape_velocities(v,dep)
@@ -81,7 +81,7 @@ function load_data(cal::Calibration,load_dep=false)
     data_dir = joinpath(_DATABASE_DIR,
                         string(cal.deployment.location),
                         "calibrations",
-                        hex(hash(cal)))
+                        hex(hash(cal),16))
     D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
     if load_dep
         dep_data = load_data(cal.deployment)
