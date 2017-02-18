@@ -17,7 +17,7 @@ function atmoscorrect(adcp::ADCPData)
     Pi = interpolate((M[:DateTime],),float(pc),Gridded(Linear()))
     ph = p-Pi[t] # hydrodynamic pressure
     cp = ph*100000./(10*9.81*1025) # Convert pressure in dbar to m
-    ADCPDataCP(deployment(adcp),cp,velocities(adcp),times(adcp),analog(adcp)...)
+    ADCPDataCP(deployment(adcp),cp,velocities(adcp),times(adcp),temperatures(adcp),pitches(adcp),rolls(adcp),headings(adcp),analog(adcp)...)
 end
 
 type InterpolatedCrossSectionData
