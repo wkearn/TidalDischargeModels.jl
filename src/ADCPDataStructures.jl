@@ -7,6 +7,10 @@ deployment,
 pressures,
 velocities,
 times,
+temperatures,
+pitches,
+rolls,
+headings,
 analog
 
 type ADCPData
