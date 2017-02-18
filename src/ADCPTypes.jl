@@ -3,7 +3,7 @@ module ADCPTypes
 
 export Creek, Deployment, Calibration, CrossSection, _DATABASE_DIR, bins, parse_deps, parse_cals, parse_cs
 
-using YAML
+using JSON
 
 using TidalDischargeModels.Databases
 
@@ -84,11 +84,11 @@ function Base.show(io::IO,cs::CrossSection)
 end
 
 function parse_deps{C}(creek::Creek{C})
-    d = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))
+    d = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))
     deps = Deployment[]
     for dep in d["deployments"]
-        sd = dep["startDate"]
-        ed = dep["endDate"]
+        sd = DateTime(dep["startDate"])
+        ed = DateTime(dep["endDate"])
         sN = dep["serialNumber"]
         hA = dep["hasAnalog"]
         bD = dep["blankingDistance"]
@@ -104,7 +104,7 @@ end
 function parse_cals{C}(creek::Creek{C})
     deps = parse_deps(creek)
     hs = hash.(deps)
-    d = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))
+    d = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))
     cals = Calibration[]
     for cal in d["calibrations"]
         dep = cal["deployment"]
@@ -117,7 +117,7 @@ function parse_cals{C}(creek::Creek{C})
 end
 
 function parse_cs{C}(creek::Creek{C})
-    cs = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))["cross-section"]
+    cs = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))["cross-section"]
     f = cs["file"]
     Amax = cs["Amax"]
     lmax = cs["lmax"]
