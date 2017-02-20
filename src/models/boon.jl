@@ -49,12 +49,12 @@ function gssr!(storage,H,Q,β)
 end
 
 function StatsBase.fit(M::BoonModel,H::Matrix{Float64},Q::Vector{Float64})
-    β = optimize(β->ssr(H,Q,β),M.β).minimum
+    β = optimize(β->ssr(H,Q,β),M.β).minimizer
     BoonModel(2,β,H,Q)
 end
 
 function StatsBase.fit!(M::BoonModel,H::Matrix{Float64},Q::Vector{Float64})
-    β = optimize(β->ssr(H,Q,β),M.β,ftol=1e-32).minimum
+    β = optimize(β->ssr(H,Q,β),M.β,ftol=1e-32).minimizer
     M.β = β
     M.H = H
     M.Q = Q
