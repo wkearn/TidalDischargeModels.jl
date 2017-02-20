@@ -108,8 +108,8 @@ function parse_cals{C}(creek::Creek{C})
     cals = Calibration[]
     for cal in d["calibrations"]
         dep = cal["deployment"]
-        sD = cal["startDate"]
-        eD = cal["endDate"]
+        sD = DateTime(cal["startDate"])
+        eD = DateTime(cal["endDate"])
         dep_match = findfirst(hex.(hs,16),dep)
         push!(cals,Calibration(deps[dep_match],sD,eD))
     end
