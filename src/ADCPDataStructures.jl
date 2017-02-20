@@ -2,7 +2,7 @@ module ADCPDataStructures
 
 using TidalDischargeModels.ADCPTypes, DataFrames
 
-export ADCPData, CalibrationData, CrossSectionData, load_data,
+export ADCPData, CrossSectionData, load_data,
 deployment,
 pressures,
 velocities,
@@ -41,23 +41,6 @@ rolls(data::ADCPData) = data.roll
 headings(data::ADCPData) = data.heading
 analog(data::ADCPData) = (get(data.a1,[]),get(data.a2,[]))
 
-type CalibrationData
-    cal::Calibration
-    t::Vector{DateTime}
-    Q::Vector{Float64}
-    adcp::Nullable{ADCPData}
-end
-
-function Base.show(io::IO,caldata::CalibrationData)
-    println(io,caldata.cal)
-    if isnull(caldata.adcp)
-        println(io,"ADCP data not loaded")
-    else
-        println(io,"ADCP data loaded")
-    end
-    print(io,"Calibration data loaded")
-end
-
 type CrossSectionData
     cs::CrossSection
     x::Vector{Float64}
@@ -91,20 +74,6 @@ function load_data(dep::Deployment)
         a2 = Nullable{Vector{Float64}}()
     end
     ADCPData(dep,p,v,t,temp,pitch,roll,heading,a1,a2)
-end
-
-function load_data(cal::Calibration,load_dep=false)
-    data_dir = joinpath(_DATABASE_DIR,
-                        string(cal.deployment.location),
-                        "calibrations",
-                        hex(hash(cal),16))
-    D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
-    if load_dep
-        dep_data = load_data(cal.deployment)
-    else
-        dep_data = Nullable{ADCPData}()
-    end
-    CalibrationData(cal,DateTime(D[:DateTime]),D[:SP_Q],dep_data)
 end
 
 function reshape_velocities(v::Vector{Float64},dep::Deployment)

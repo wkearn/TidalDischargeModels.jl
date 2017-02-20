@@ -1,7 +1,7 @@
 module ADCPTypes
 
 
-export Creek, Deployment, Calibration, CrossSection, _DATABASE_DIR, bins, parse_deps, parse_cals, parse_cs
+export Creek, Deployment, CrossSection, _DATABASE_DIR, bins, parse_deps, parse_cs
 
 using JSON
 
@@ -55,20 +55,6 @@ function Base.show(io::IO,dep::Deployment)
     print(io,dep.adcp)
 end
 
-type Calibration
-    deployment::Deployment
-    startDate::DateTime
-    endDate::DateTime
-end
-
-function Base.show(io::IO,cal::Calibration)
-    println(io,"Calibration")
-    println(io,"------------")
-    println(io,"Start time: ",cal.startDate)
-    println(io,"End time: ",cal.endDate)
-    print(io,cal.deployment)    
-end
-
 type CrossSection
     location::Creek
     file::String
@@ -101,21 +87,6 @@ function parse_deps{C}(creek::Creek{C})
     deps
 end
 
-function parse_cals{C}(creek::Creek{C})
-    deps = parse_deps(creek)
-    hs = hash.(deps)
-    d = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))
-    cals = Calibration[]
-    for cal in d["calibrations"]
-        dep = cal["deployment"]
-        sD = DateTime(cal["startDate"])
-        eD = DateTime(cal["endDate"])
-        dep_match = findfirst(hex.(hs,16),dep)
-        push!(cals,Calibration(deps[dep_match],sD,eD))
-    end
-    cals
-end
-
 function parse_cs{C}(creek::Creek{C})
     cs = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))["cross-section"]
     f = cs["file"]
@@ -143,12 +114,6 @@ function Base.hash(x::Deployment,h::UInt)
     hash(x.adcp,h)
 end
 
-function Base.hash(x::Calibration,h::UInt)
-    h = hash(x.deployment,h)
-    h = hash(x.startDate,h)
-    h = hash(x.endDate,h)
-end
-
 function Base.hash(x::CrossSection,h::UInt)
     h = hash(x.location,h)
     h = hash(x.file,h)
@@ -160,7 +125,6 @@ end
 Base.:(==)(c1::Creek,c2::Creek) = hash(c1)==hash(c2)
 Base.:(==)(d1::Deployment,d2::Deployment) = hash(d1)==hash(d2)
 Base.:(==)(a1::ADCP,a2::ADCP) = hash(a1)==hash(a2)
-Base.:(==)(c1::Calibration,c2::Calibration) = hash(c1)==hash(c2)
 Base.:(==)(cs1::CrossSection,cs2::CrossSection) = hash(cs1)==hash(cs2)
 
 
