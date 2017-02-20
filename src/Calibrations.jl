@@ -5,7 +5,7 @@ module Calibrations
 
 export Calibration, CalibrationData, parse_cals
 
-using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames
+using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
 
 #####################################################
 # Definition of Calibration type and loading
@@ -79,4 +79,44 @@ function ADCPDataStructures.load_data(cal::Calibration)
     CalibrationData(cal,DateTime(D[:DateTime]),D[:SP_Q],dd)
 end
 
+function interpolateCalibration(cal::CalibrationData)
+    Qi = interpolate((cal.dd.ts,),cal.dd.Q,Gridded(Linear()))
+    Qs = Qi[cal.t]
 end
+
+"""
+Constructs a polynomial regression of order k to calibrate 
+ADCP discharge to the true discharge
+"""
+function calibratePolynomial(cal::CalibrationData,k)
+    Qs = interpolateCalibration(cal)
+    X = ones(length(Qs),k+1)
+    for i in 1:k+1
+        X[:,i] = Qs.^(i-1)
+    end
+    X\cal.Q
+end
+
+"""
+Performs a global calibration for multiple CalibrationDatas
+"""
+function calibratePolynomial(cals::Vector{CalibrationData},k)
+    Qs = vcat(interpolateCalibration.(cals)...)
+    Qq = vcat([cals[i].Q for i in 1:length(cals)]...)
+    X = ones(length(Qs),k+1)
+    for i in 1:k+1
+        X[:,i] = Qs.^(i-1)
+    end
+    X\Qq
+end
+
+function calibrateData(dd::DischargeData,β::Vector{Float64})
+    k = length(β)-1
+    X = zeros(length(dd.Q),k+1)
+    for i in 1:k+1
+        X[:,i] = dd.Q.^(i-1)
+    end
+    DischargeData(dd.cp,dd.ts,dd.vs,dd.A,X*β)
+end
+
+end # module end
