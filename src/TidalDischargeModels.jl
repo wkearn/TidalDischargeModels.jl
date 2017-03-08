@@ -18,7 +18,7 @@ TidalDischargeModels.MetData,
 TidalDischargeModels.DischargeDataStructures,
 TidalDischargeModels.Calibrations
 
-export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIModel, VolterraModel, RegularizedVolterraModel, kMeansModel, ThresholdModel, nash_sutcliffe, flatness
+export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIModel, VolterraModel, RegularizedVolterraModel, kMeansModel, ThresholdModel, nash_sutcliffe, flatness, ρ, c_p
 
 include("dischargemodels.jl")
 include("utils.jl")
