@@ -22,6 +22,6 @@ export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIM
 
 include("dischargemodels.jl")
 include("utils.jl")
-
+include("constants.jl")
 
 end # module end
