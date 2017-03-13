@@ -1,6 +1,5 @@
-include("../src/TidalDischargeModels.jl")
+using TidalDischargeModels, TidalFluxExampleData
 TDM = TidalDischargeModels
-using TidalDischargeModels
 
 creek = Creek{:sweeney}()
 
