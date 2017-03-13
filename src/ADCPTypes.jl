@@ -1,13 +1,10 @@
 module ADCPTypes
 
-
-export Creek, Deployment, CrossSection, _DATABASE_DIR, bins, parse_deps, parse_cs
+export Creek, Deployment, CrossSection, bins, parse_deps, parse_cs
 
 using JSON
 
 using TidalDischargeModels.Databases
-
-_DATABASE_DIR = Databases._ADCPDATA_DIR
 
 type Creek{C}
     
@@ -69,8 +66,8 @@ function Base.show(io::IO,cs::CrossSection)
     print(io,cs.location)
 end
 
-function parse_deps{C}(creek::Creek{C})
-    d = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))
+function parse_deps{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+    d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
     deps = Deployment[]
     for dep in d["deployments"]
         sd = DateTime(dep["startDate"])
@@ -87,8 +84,8 @@ function parse_deps{C}(creek::Creek{C})
     deps
 end
 
-function parse_cs{C}(creek::Creek{C})
-    cs = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))["cross-section"]
+function parse_cs{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+    cs = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))["cross-section"]
     f = cs["file"]
     Amax = cs["Amax"]
     lmax = cs["lmax"]

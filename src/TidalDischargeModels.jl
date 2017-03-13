@@ -16,6 +16,7 @@ include("Calibrations.jl") # Calibrate ADCP discharges to true discharges
 TidalDischargeModels.ADCPDataStructures,
 TidalDischargeModels.MetData,
 TidalDischargeModels.DischargeDataStructures,
+TidalDischargeModels.Databases,
 TidalDischargeModels.Calibrations
 
 export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIModel, VolterraModel, RegularizedVolterraModel, kMeansModel, ThresholdModel, nash_sutcliffe, flatness, ρ, c_p

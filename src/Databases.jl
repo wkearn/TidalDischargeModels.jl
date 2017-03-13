@@ -1,8 +1,18 @@
 # Probably not a good way to load data directory paths
 module Databases
 
-_ADCPDATA_DIR = ""
+export setADCPdatadir!, setmetdatadir!, data_directories
 
-_METDATA_DIR = ""
+data_directories = Dict(:_ADCPDATA_DIR=>"",
+                        :_METDATA_DIR=>"")
+                        
+
+function setADCPdatadir!(path,datavars=data_directories)
+    datavars[:_ADCPDATA_DIR] = path
+end
+
+function setmetdatadir!(path,datavars=data_directories)
+    datavars[:_METDATA_DIR] = path
+end
 
 end # module end
