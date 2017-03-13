@@ -2,25 +2,6 @@ This is a Julia package to fit stage-discharge models in tidal environments as d
 
 To install, first make sure you have a working installation of [Julia v0.5 on your system](http://julialang.org/downloads/).
 
-You will also need the following published Julia packages:
-
-- Reexport
-- StatsBase
-- Optim
-- YAML if you're using the data management subsystem
-
-To install these from the Julia prompt
-
-```julia
-julia> Pkg.add("Reexport")
-
-julia> Pkg.add("StatsBase")
-
-julia> Pkg.add("Optim")
-
-julia> Pkg.add("YAML")
-```
-
 From the Julia prompt:
 
 ```julia
