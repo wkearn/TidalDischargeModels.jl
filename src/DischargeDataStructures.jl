@@ -13,7 +13,7 @@ function atmoscorrect(adcp::ADCPData)
     M = parsemet(year(deployment(adcp).startDate))
     t = times(adcp)
     p = pressures(adcp)
-    pc = M[:P]/100 - 10 # Convert to dbar and subtract 1 atm
+    pc = M[:P]/100 - 10.1325 # Convert to dbar and subtract 1 atm (in dbar)
     Pi = interpolate((M[:DateTime],),float(pc),Gridded(Linear()))
     ph = p-Pi[t] # hydrodynamic pressure
     cp = ph*100000./(10*9.81*1025) # Convert pressure in dbar to m
@@ -103,7 +103,7 @@ function DischargeData(adcp::ADCPData,cs::CrossSectionData)
     vma = vavg(cd1)
     l,Z = eig(cov(vma))
     vs = vma*Z[:,3]
-    h = minimum(cp)+E:0.01:maximum(cp)+E
+    h = E+0.01:0.01:maximum(cp)+E
     csdi = InterpolatedCrossSectionData(cs)
     Ah = map(x->area(csdi,x),h)
     X = [ones(h) h h.^2 h.^3 h.^4 h.^5]
