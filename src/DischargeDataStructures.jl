@@ -3,7 +3,7 @@ module DischargeDataStructures
 using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, TidalDischargeModels.MetData, DataFrames, Interpolations, Base.Dates
 
 export atmoscorrect, InterpolatedCrossSectionData, ADCPDataCP,
-area, DischargeData
+area
 
 typealias ADCPDataCP ADCPData
 
