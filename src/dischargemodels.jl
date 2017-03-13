@@ -70,19 +70,19 @@ StatsBase.fit(M::DischargeModel, Y::Matrix{Float64}) = fit(M,Y[1:end-1,:],vec(Y[
 
 StatsBase.fit!(M::DischargeModel,Y::Matrix{Float64}) = fit!(M,Y[1:end-1,:],vec(Y[end,:]))
 
-# Functions for fitting from a DischargeData type
+# Functions for fitting from a Discharge type
 
-estfun!(M::DischargeModel,dd::DischargeData,range) = estfun!(M,makelagmatrix(dd),dd.Q,range)
-estfun!(M::DischargeModel,dd::DischargeData) = estfun!(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
+estfun!(M::DischargeModel,dd::Discharge,range) = estfun!(M,makelagmatrix(dd),dd.Q,range)
+estfun!(M::DischargeModel,dd::Discharge) = estfun!(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
 
-estfun(M::DischargeModel,dd::DischargeData,range) = estfun(M,makelagmatrix(dd),dd.Q,range)
-estfun(M::DischargeModel,dd::DischargeData) = estfun(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
+estfun(M::DischargeModel,dd::Discharge,range) = estfun(M,makelagmatrix(dd),dd.Q,range)
+estfun(M::DischargeModel,dd::Discharge) = estfun(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
 
-evalfun(M::DischargeModel,dd::DischargeData,range) = evalfun(M,makelagmatrix(dd),dd.Q,range)
-evalfun(M::DischargeModel,dd::DischargeData) = evalfun(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
+evalfun(M::DischargeModel,dd::Discharge,range) = evalfun(M,makelagmatrix(dd),dd.Q,range)
+evalfun(M::DischargeModel,dd::Discharge) = evalfun(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
 
-evalmodel(M::DischargeModel,dd::DischargeData,range) = evalmodel(M,makelagmatrix(dd),range)
-evalmodel(M::DischargeModel,dd::DischargeData) = evalmodel(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
+evalmodel(M::DischargeModel,dd::Discharge,range) = evalmodel(M,makelagmatrix(dd),range)
+evalmodel(M::DischargeModel,dd::Discharge) = evalmodel(M,makelagmatrix(dd),dd.Q,1:length(dd.Q))
 
 # Add in all the possible models
 const _models = ["lti",
