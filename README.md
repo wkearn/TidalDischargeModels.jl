@@ -1,4 +1,4 @@
-This is a Julia package to fit stage-discharge models in tidal environments as detailed in Kearney et al. 2017. Stage-discharge relationships in tidal channels. *Limnology and Oceanography: Methods*.
+This is a Julia package to fit stage-discharge models in tidal environments as detailed in Kearney et al. 2017. Stage-discharge relationships in tidal channels. *Limnology and Oceanography: Methods* ([10.1002/lom3.10168](http://dx.doi.org/10.1002/lom3.10168)).
 
 To install, first make sure you have a working installation of [Julia v0.5 on your system](http://julialang.org/downloads/).
 
