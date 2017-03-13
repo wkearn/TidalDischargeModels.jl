@@ -2,7 +2,7 @@ module TidalDischargeModels
 
 using Reexport
 
-@reexport using Base.Dates, StatsBase, Optim
+@reexport using Base.Dates, StatsBase, Optim, DischargeData
 
 include("Databases.jl")
 
