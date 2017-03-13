@@ -5,7 +5,7 @@ module Calibrations
 
 export Calibration, CalibrationData, parse_cals
 
-using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, DischargeData, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
+using ADCPDataProcessing, DischargeData, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
 
 #####################################################
 # Definition of Calibration type and loading
@@ -65,7 +65,7 @@ function Base.show(io::IO,caldata::CalibrationData)
     print(io,"Calibration data loaded")
 end
 
-function ADCPDataStructures.load_data(cal::Calibration)
+function ADCPDataProcessing.load_data(cal::Calibration)
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
