@@ -5,7 +5,7 @@ module Calibrations
 
 export Calibration, CalibrationData, parse_cals
 
-using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
+using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, DischargeData, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
 
 #####################################################
 # Definition of Calibration type and loading
@@ -57,7 +57,7 @@ type CalibrationData
     cal::Calibration
     t::Vector{DateTime}
     Q::Vector{Float64}
-    dd::DischargeData
+    dd::Discharge
 end
 
 function Base.show(io::IO,caldata::CalibrationData)
@@ -69,7 +69,7 @@ function ADCPDataStructures.load_data(cal::Calibration)
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
-    dd = DischargeData(ad,cs)
+    dd = Discharge(ad,cs)
     
     data_dir = joinpath(_DATABASE_DIR,
                         string(cal.deployment.location),
@@ -110,13 +110,13 @@ function calibratePolynomial(cals::Vector{CalibrationData},k)
     X\Qq
 end
 
-function calibrateData(dd::DischargeData,β::Vector{Float64})
+function calibrateData(dd::Discharge,β::Vector{Float64})
     k = length(β)-1
     X = zeros(length(dd.Q),k+1)
     for i in 1:k+1
         X[:,i] = dd.Q.^(i-1)
     end
-    DischargeData(dd.cp,dd.ts,dd.vs,dd.A,X*β)
+    Discharge(dd.cp,dd.ts,dd.vs,dd.A,X*β)
 end
 
 end # module end
