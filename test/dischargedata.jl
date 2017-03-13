@@ -1,3 +1,3 @@
 println("Calculating discharges")
-Q1 = DischargeData(d1,csd)
-Q2 = DischargeData(d2,csd)
+Q1 = Discharge(d1,csd)
+Q2 = Discharge(d2,csd)
