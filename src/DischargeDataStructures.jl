@@ -85,16 +85,6 @@ function vavg(adcp::ADCPDataCP)
     vma
 end
 
-type DischargeData
-    cp::Vector{Float64}
-    ts::Vector{DateTime}
-    vs::Vector{Float64}
-    A::Vector{Float64}
-    Q::Vector{Float64}
-end
-
-DischargeData(cp::Vector{Float64},Q::Vector{Float64}) = DischargeData(cp,DateTime[],Float64[],Float64[],Q)
-
 function DischargeData(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
