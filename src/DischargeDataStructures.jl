@@ -85,7 +85,7 @@ function vavg(adcp::ADCPDataCP)
     vma
 end
 
-function DischargeData(adcp::ADCPData,cs::CrossSectionData)
+function DischargeData.Discharge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
     cp = cd1.p
@@ -101,7 +101,7 @@ function DischargeData(adcp::ADCPData,cs::CrossSectionData)
     A = b[1] + b[2]*(cp+E)+b[3]*(cp+E).^2+b[4]*(cp+E).^3+b[5]*(cp+E).^4+b[6]*(cp+E).^5
     Q = vs.*A
     Qi = Q.*detectOrientation(cp,Q)
-    DischargeData(cp,ts,vs,A,Qi)
+    Discharge(cp,ts,vs,A,Qi)
 end
 
 # A quick, dirty and not great way to fix the sign of Q
