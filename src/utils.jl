@@ -13,13 +13,13 @@ function lagmatrix{T}(x::AbstractVector{T})
 end
 
 """
-Create a lagmatrix for the stage data in a DischargeData
+Create a lagmatrix for the stage data in a Discharge
 """
-function makelagmatrix(dd::DischargeData)
+function makelagmatrix(dd::Discharge)
     lagmatrix(dd.cp)
 end
 
-function preparedata(dd::DischargeData,range,M)
+function preparedata(dd::Discharge,range,M)
     H = makelagmatrix(dd)
     Q = dd.Q
     Hm = validate(H,range,M)
