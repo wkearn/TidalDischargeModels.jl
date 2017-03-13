@@ -1,6 +1,6 @@
 module Fluxes
 
-using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, TidalDischargeModels.DischargeDataStructures
+using TidalDischargeModels.ADCPTypes, TidalDischargeModels.ADCPDataStructures, DischargeData, TidalDischargeModels.DischargeDataStructures
 
 type Concentration <: AbstractVector{Float64}
     C::Vector{Float64}
@@ -16,6 +16,6 @@ Base.size(f::Flux) = size(f.F)
 Base.getindex(c::Concentration,i::Int) = getindex(c.C,i)
 Base.getindex(f::Flux,i::Int) = getindex(f.F,i)
 
-Base.:(*)(c::Concentration,dd::DischargeData) = Flux(c.C.*dd.Q)
+Base.:(*)(c::Concentration,dd::Discharge) = Flux(c.C.*dd.Q)
 
 end # module end
