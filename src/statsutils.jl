@@ -3,7 +3,7 @@
 
 nash_sutcliffe(M::DischargeModel) = 1-sumabs2(residuals(M))/sumabs2(model_response(M)-mean(model_response(M)))
 nash_sutcliffe(M::DischargeModel,H,Q) = 1-sumabs2(residuals(M,H,Q))/sumabs2(Q-mean(Q))
-function nash_sutcliffe(M::DischargeModel,dd::DischargeData)
+function nash_sutcliffe(M::DischargeModel,dd::Discharge)
     Hm,Qm = preparedata(dd,1:length(dd.Q),M.M)
     nash_sutcliffe(M,Hm,Qm)
 end
@@ -58,7 +58,7 @@ function flatness(x)
 end
 
 flatness(M::DischargeModel,H,Q) = flatness(residuals(M,H,Q))
-function flatness(M::DischargeModel,dd::DischargeData)
+function flatness(M::DischargeModel,dd::Discharge)
     Hm,Qm = preparedata(dd,1:length(dd.Q),M.M)
     flatness(M,Hm,Qm)
 end
