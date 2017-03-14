@@ -5,7 +5,7 @@ module Calibrations
 
 export Calibration, CalibrationData, parse_cals
 
-using ADCPDataProcessing, DischargeData, TidalDischargeModels.DischargeDataStructures, JSON, DataFrames, Interpolations
+using ADCPDataProcessing, DischargeData, JSON, DataFrames, Interpolations
 
 #####################################################
 # Definition of Calibration type and loading
