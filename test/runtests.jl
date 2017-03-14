@@ -1,6 +1,9 @@
 using TidalDischargeModels, TidalFluxExampleData
 TDM = TidalDischargeModels
 
+setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))
+setmetdatadir!(Pkg.dir("TidalFluxExampleData","data","met"))
+
 creek = Creek{:sweeney}()
 
 include("deployments.jl")
