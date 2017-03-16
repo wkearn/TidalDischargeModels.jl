@@ -1,4 +1,4 @@
-using TidalDischargeModels, TidalFluxExampleData
+using ADCPDataProcessing, PIEMetData, TidalDischargeModels, TidalFluxExampleData
 TDM = TidalDischargeModels
 
 setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))

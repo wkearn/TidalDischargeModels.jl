@@ -2,7 +2,7 @@ module TidalDischargeModels
 
 using Reexport
 
-@reexport using Base.Dates, StatsBase, Optim, DischargeData, ADCPDataProcessing
+@reexport using Base.Dates, StatsBase, Optim, DischargeData
 
 include("Calibrations.jl") # Calibrate ADCP discharges to true discharges
 
