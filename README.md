@@ -6,6 +6,8 @@ This is a Julia package to fit stage-discharge models in tidal environments as d
 
 If you would like the version of the code used in that paper, checkout tag [v0.1.0](https://github.com/wkearn/TidalDischargeModels.jl/tree/v0.1.0).
 
+If you have questions on how to use this code to fit stage-discharge models, the best way to get in touch is to [open an issue](https://github.com/wkearn/TidalDischargeModels.jl/issues/new) on this repository.
+
 To install, first make sure you have a working installation of [Julia v0.5 on your system](http://julialang.org/downloads/).
 
 From the Julia prompt:
