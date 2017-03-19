@@ -10,6 +10,28 @@ If you have questions on how to use this code to fit stage-discharge models, the
 
 To install, first make sure you have a working installation of [Julia v0.5 on your system](http://julialang.org/downloads/).
 
+# Installation
+
+## Dependencies
+
+TidalDischargeModels.jl depends on the currently unregistered [DischargeData.jl](https://github.com/wkearn/DischargeData.jl), which you will need to install manually.
+
+From a Julia prompt:
+
+```julia
+julia> Pkg.clone("https://github.com/wkearn/DischargeData.jl")
+```
+
+If you want to run the tests, you'll also need to install [PIEMetData.jl](https://github.com/wkearn/PIEMetData.jl), [ADCPDataProcessing.jl](https://github.com/wkearn/ADCPDataProcessing.jl) and [TidalFluxExampleData.jl](https://github.com/wkearn/TidalFluxExampleData.jl)
+
+```julia
+julia> Pkg.clone("https://github.com/wkearn/PIEMetData.jl")
+julia> Pkg.clone("https://github.com/wkearn/ADCPDataProcessing.jl")
+julia> Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl")
+```
+
+## Package installation
+
 From the Julia prompt:
 
 ```julia
