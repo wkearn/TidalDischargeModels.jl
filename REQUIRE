@@ -1,7 +1,4 @@
 julia 0.5
-DataFrames
-JSON
-Interpolations
 Reexport
 StatsBase
 Optim
