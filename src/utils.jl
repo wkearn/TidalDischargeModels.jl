@@ -13,10 +13,10 @@ function lagmatrix{T}(x::AbstractVector{T})
 end
 
 """
-Create a lagmatrix for the stage data in a Discharge
+Create a lagmatrix for any given Quantity
 """
-function makelagmatrix(dd::Discharge)
-    lagmatrix(dd.cp)
+function makelagmatrix(q::Quantity)
+    lagmatrix(quantity(q))
 end
 
 function preparedata(dd::Discharge,range,M)
