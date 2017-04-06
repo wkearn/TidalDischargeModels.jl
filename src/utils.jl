@@ -19,9 +19,9 @@ function makelagmatrix(q::Quantity)
     lagmatrix(quantity(q))
 end
 
-function preparedata(dd::Discharge,range,M)
-    H = makelagmatrix(dd)
-    Q = dd.Q
+function preparedata(p::Stage,d::Discharge,range,M)
+    H = makelagmatrix(p)
+    Q = quantity(d)
     Hm = validate(H,range,M)
     Qm = validate(Q,range,M)
     Hm,Qm
