@@ -11,8 +11,8 @@ include("adcpdata.jl")
 include("crosssections.jl")
 include("dischargedata.jl")
 
-N1 = length(Q1.cp)
-N2 = length(Q2.cp)
+N1 = length(Q1)
+N2 = length(Q2)
 
 include("boon.jl")
 include("lti.jl")
