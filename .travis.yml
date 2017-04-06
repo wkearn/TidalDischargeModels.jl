@@ -9,7 +9,14 @@ notifications:
 # uncomment the following lines to override the default test script
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone("https://github.com/wkearn/DischargeData.jl"); Pkg.clone("https://github.com/wkearn/PIEMetData.jl"); Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl"); Pkg.clone("https://github.com/wkearn/ADCPDataProcessing.jl"); Pkg.clone(pwd()); Pkg.build("TidalDischargeModels"); Pkg.test("TidalDischargeModels"; coverage=true)'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/DischargeData.jl");'
+  - julia -e 'Pkg.checkout("DischargeData","generics")'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/PIEMetData.jl");'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl");'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/ADCPDataProcessing.jl");'
+  - julia -e 'Pkg.checkout("ADCPDataProcessing","generics")'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("TidalDischargeModels");'
+  - julia -e 'Pkg.test("TidalDischargeModels"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
   - julia -e 'cd(Pkg.dir("TidalDischargeModels")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
