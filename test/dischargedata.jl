@@ -1,3 +1,3 @@
 println("Calculating discharges")
-Q1 = Discharge(d1,csd)
-Q2 = Discharge(d2,csd)
+p1,Q1 = computedischarge(d1,csd)
+p2,Q2 = computedischarge(d2,csd)
