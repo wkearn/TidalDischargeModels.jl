@@ -35,6 +35,7 @@ end
 
 
 type Deployment
+    id::String
     location::Creek
     startDate::DateTime
     endDate::DateTime
@@ -51,6 +52,7 @@ function Base.show(io::IO,dep::Deployment)
 end
 
 type Calibration
+    id::String
     deployment::Deployment
     startDate::DateTime
     endDate::DateTime
@@ -82,6 +84,7 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDAT
     d = YAML.load_file(joinpath(ADCPdatadir,string(C),"METADATA.yaml"))
     deps = Deployment[]
     for dep in d["deployments"]
+        id = dep["id"]
         sd = dep["startDate"]
         ed = dep["endDate"]
         sN = dep["serialNumber"]
@@ -91,22 +94,23 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDAT
         nC = dep["nCells"]
         dT = dep["deltaT"]
         aZ = dep["elevation"]
-        push!(deps,Deployment(creek,sd,ed,ADCP(sN,hA,bD,cS,nC,dT,aZ)))
+        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,bD,cS,nC,dT,aZ)))
     end
     deps
 end
 
 function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     deps = parse_deps(creek)
-    hs = hash.(deps)
+    ids = map(x->x.id,deps)
     d = YAML.load_file(joinpath(ADCPdatadir,string(C),"METADATA.yaml"))
     cals = Calibration[]
     for cal in d["calibrations"]
+        id = dep["id"]
         dep = cal["deployment"]
         sD = cal["startDate"]
         eD = cal["endDate"]
-        dep_match = findfirst(hex.(hs),dep)
-        push!(cals,Calibration(deps[dep_match],sD,eD))
+        dep_match = findfirst(ids,dep)
+        push!(cals,Calibration(id,deps[dep_match],sD,eD))
     end
     cals
 end
