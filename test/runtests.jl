@@ -1,6 +1,8 @@
-include("../src/TidalDischargeModels.jl")
-TDM = TidalDischargeModels
 using TidalDischargeModels
+TDM = TidalDischargeModels
+
+TDM.Databases.setADCPdatadir!("/home/wkearn/Documents/graduate/projects/plum_island/TIDE/data/discharge/database")
+TDM.Databases.setmetdatadir!("/home/wkearn/Documents/graduate/projects/plum_island/TIDE/data/met")
 
 creek = Creek{:sweeney}()
 

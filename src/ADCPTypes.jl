@@ -1,13 +1,8 @@
 module ADCPTypes
 
+export Creek, Deployment, Calibration, CrossSection, bins, parse_deps, parse_cals, parse_cs
 
-export Creek, Deployment, Calibration, CrossSection, _DATABASE_DIR, bins, parse_deps, parse_cals, parse_cs
-
-using YAML
-
-using TidalDischargeModels.Databases
-
-_DATABASE_DIR = Databases._ADCPDATA_DIR
+using YAML, TidalDischargeModels.Databases
 
 type Creek{C}
     
@@ -83,8 +78,8 @@ function Base.show(io::IO,cs::CrossSection)
     print(io,cs.location)
 end
 
-function parse_deps{C}(creek::Creek{C})
-    d = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))
+function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    d = YAML.load_file(joinpath(ADCPdatadir,string(C),"METADATA.yaml"))
     deps = Deployment[]
     for dep in d["deployments"]
         sd = dep["startDate"]
@@ -101,10 +96,10 @@ function parse_deps{C}(creek::Creek{C})
     deps
 end
 
-function parse_cals{C}(creek::Creek{C})
+function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     deps = parse_deps(creek)
     hs = hash.(deps)
-    d = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))
+    d = YAML.load_file(joinpath(ADCPdatadir,string(C),"METADATA.yaml"))
     cals = Calibration[]
     for cal in d["calibrations"]
         dep = cal["deployment"]
@@ -116,8 +111,8 @@ function parse_cals{C}(creek::Creek{C})
     cals
 end
 
-function parse_cs{C}(creek::Creek{C})
-    cs = YAML.load_file(joinpath(_DATABASE_DIR,string(C),"METADATA.yaml"))["cross-section"]
+function parse_cs{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    cs = YAML.load_file(joinpath(ADCPdatadir,string(C),"METADATA.yaml"))["cross-section"]
     f = cs["file"]
     Amax = cs["Amax"]
     lmax = cs["lmax"]

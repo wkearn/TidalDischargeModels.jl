@@ -1,6 +1,6 @@
 module ADCPDataStructures
 
-using TidalDischargeModels.ADCPTypes, DataFrames
+using TidalDischargeModels.ADCPTypes, TidalDischargeModels.Databases, DataFrames
 
 export ADCPData, CalibrationData, CrossSectionData, load_data,
 deployment,
@@ -57,8 +57,8 @@ function Base.show(io::IO,csdata::CrossSectionData)
     print(io,"Cross section data loaded")
 end
 
-function load_data(dep::Deployment)
-    data_dir = joinpath(_DATABASE_DIR,
+function load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    data_dir = joinpath(ADCPdatadir,
                         string(dep.location),
                         "deployments",
                         hex(hash(dep)))
@@ -77,8 +77,8 @@ function load_data(dep::Deployment)
     ADCPData(dep,p,v,t,a1,a2)
 end
 
-function load_data(cal::Calibration,load_dep=false)
-    data_dir = joinpath(_DATABASE_DIR,
+function load_data(cal::Calibration,load_dep=false,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    data_dir = joinpath(ADCPdatadir,
                         string(cal.deployment.location),
                         "calibrations",
                         hex(hash(cal)))
@@ -97,8 +97,8 @@ function reshape_velocities(v::Vector{Float64},dep::Deployment)
     reshape(v,(n,m,3)...)
 end
 
-function load_data(cs::CrossSection)
-    data_path = joinpath(_DATABASE_DIR,
+function load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    data_path = joinpath(ADCPdatadir,
                         string(cs.location),
                         cs.file)
     D = readtable(data_path)
