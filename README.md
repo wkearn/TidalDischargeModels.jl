@@ -2,29 +2,10 @@ This is a Julia package to fit stage-discharge models in tidal environments as d
 
 To install, first make sure you have a working installation of [Julia v0.5 on your system](http://julialang.org/downloads/).
 
-You will also need the following published Julia packages:
-
-- Reexport
-- StatsBase
-- Optim
-- YAML if you're using the data management subsystem
-
-To install these from the Julia prompt
+Install TidalDischargeModels.jl from the Julia prompt:
 
 ```julia
-julia> Pkg.add("Reexport")
-
-julia> Pkg.add("StatsBase")
-
-julia> Pkg.add("Optim")
-
-julia> Pkg.add("YAML")
-```
-
-From the Julia prompt:
-
-```julia
-julia> Pkg.clone("https://github.com/wkearn/TidalDischargeModels")
+julia> Pkg.clone("https://github.com/wkearn/TidalDischargeModels.jl")
 ```
 
 I have included in the package a few modules which I use to manage acoustic Doppler current profiler data and get it into a form that lets me fit the models. You don't need to use my data management system to fit the models, however, so you can ignore all the code in the files `src/ADCPTypes.jl`, `src/ADCPDataStructures.jl`, and `src/MetData.jl`.
