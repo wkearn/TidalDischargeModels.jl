@@ -1,8 +1,8 @@
-using TidalDischargeModels
+using TidalFluxExampleData, TidalDischargeModels
 TDM = TidalDischargeModels
 
-TDM.Databases.setADCPdatadir!("/home/wkearn/Documents/graduate/projects/plum_island/TIDE/data/discharge/database")
-TDM.Databases.setmetdatadir!("/home/wkearn/Documents/graduate/projects/plum_island/TIDE/data/met")
+TDM.Databases.setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))
+TDM.Databases.setmetdatadir!(Pkg.dir("TidalFluxExampleData","data","met"))
 
 creek = Creek{:sweeney}()
 
