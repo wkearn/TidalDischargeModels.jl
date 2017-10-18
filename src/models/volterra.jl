@@ -2,7 +2,7 @@
 # A unifying view of Wiener and Volterra theory and polynomial
 # kernel regression
 
-abstract VolterraKernel
+abstract type VolterraKernel end
 
 export AdaptiveKernel,
 InhomogeneousPolyKernel,

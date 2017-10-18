@@ -30,7 +30,7 @@ We implement two helper functions
 the range given
 - `evalfun(model,H,Q,range)` which evaluates a model's performance over the range given
 """
-abstract DischargeModel <: RegressionModel
+abstract type DischargeModel <: RegressionModel end
 
 function estfun!(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64},range)
     Ht = validate(H,range,model.M)
