@@ -36,7 +36,7 @@ function boon_gradient(H::Matrix{Float64},β)
 end
 
 function ssr(H,Q,β)    
-    0.5*sumabs2(Q-boon(H,β))
+    0.5*sum(abs2,Q-boon(H,β))
 end
 
 function gssr!(storage,H,Q,β)
