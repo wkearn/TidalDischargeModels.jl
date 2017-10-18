@@ -12,6 +12,7 @@ script:
   - julia -e 'Pkg.clone("https://github.com/wkearn/DischargeData.jl");'
   - julia -e 'Pkg.clone("https://github.com/wkearn/PIEMetData.jl");'
   - julia -e 'Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl");'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/TidalFluxCalibrations.jl");'
   - julia -e 'Pkg.clone("https://github.com/wkearn/ADCPDataProcessing.jl");'
   - julia -e 'Pkg.clone(pwd()); Pkg.build("TidalDischargeModels");'
   - julia -e 'Pkg.test("TidalDischargeModels"; coverage=true)'
