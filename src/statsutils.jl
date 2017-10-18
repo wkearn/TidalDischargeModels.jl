@@ -1,8 +1,8 @@
 # Statistical computations for DischargeModels
 
 
-nash_sutcliffe(M::DischargeModel) = 1-sumabs2(residuals(M))/sumabs2(model_response(M)-mean(model_response(M)))
-nash_sutcliffe(M::DischargeModel,H,Q) = 1-sumabs2(residuals(M,H,Q))/sumabs2(Q-mean(Q))
+nash_sutcliffe(M::DischargeModel) = 1-sum(abs2,residuals(M))/sum(abs2,model_response(M)-mean(model_response(M)))
+nash_sutcliffe(M::DischargeModel,H,Q) = 1-sum(abs2,residuals(M,H,Q))/sum(abs2,Q-mean(Q))
 function nash_sutcliffe(M::DischargeModel,p::Stage,dd::Discharge)
     Hm,Qm = preparedata(p,dd,1:length(dd),M.M)
     nash_sutcliffe(M,Hm,Qm)
@@ -53,7 +53,7 @@ ljung_box_test(M::DischargeModel,p) = ljung_box_test(M,M.H,M.Q,p)
 Calculate the spectral flatness of a signal
 """
 function flatness(x)
-    psd = abs2(fft(x))
+    psd = abs2.(fft(x))
     geomean(psd)/mean(psd)
 end
 
@@ -74,8 +74,8 @@ pe(M::DischargeModel) = var(residuals(M))
 Calculate the coefficient of determination
 """
 function r2(M::DischargeModel,H,Q)
-    SStot = sumabs2(Q-mean(Q))
-    SSres = sumabs2(residuals(M,H,Q))
+    SStot = sum(abs2,Q-mean(Q))
+    SSres = sum(abs2,residuals(M,H,Q))
     1-SSres/SStot
 end
 
