@@ -51,7 +51,7 @@ estfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float6
 function evalfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64},range)
     Ht = validate(H,range,model.M)   
     Qt = validate(Q,range,model.M)
-    sumabs2(residuals(model,Ht,Qt))
+    sum(abs2,residuals(model,Ht,Qt))
 end
 
 evalfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalfun(model,H,Q,1:length(Q))
@@ -61,7 +61,7 @@ function evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},rang
     predict(model,Ht)
 end
 
-evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalmodel(model,H,Q,1:length(Q))
+evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalmodel(model,H,1:length(Q))
 
 """
 This is  the one argument form of fitting a discharge model
