@@ -14,7 +14,6 @@ end
 
 function preparedata(p::Vector{Float64},d::Vector{Float64},range,M)
     H = lagmatrix(p)
-    Q = quantity(d)
     Hm = validate(H,range,M)
     Qm = validate(Q,range,M)
     Hm,Qm
