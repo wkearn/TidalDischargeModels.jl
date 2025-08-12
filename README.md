@@ -1,6 +1,6 @@
 # TidalDischargeModels
 
-[![Build Status](https://travis-ci.org/wkearn/TidalDischargeModels.jl.svg?branch=master)](https://travis-ci.org/wkearn/TidalDischargeModels.jl)
+[![CI](https://github.com/wkearn/TidalDischargeModels.jl/actions/workflows/ci.yaml/badge.svg)](https://github.com/wkearn/TidalDischargeModels.jl/actions/workflows/ci.yaml)
 
 This is a Julia package to fit stage-discharge models in tidal environments as detailed in Kearney et al. 2017. Stage-discharge relationships in tidal channels. *Limnology and Oceanography: Methods* ([10.1002/lom3.10168](http://dx.doi.org/10.1002/lom3.10168)).
 
