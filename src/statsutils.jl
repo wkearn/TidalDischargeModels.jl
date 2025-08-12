@@ -23,7 +23,7 @@ end
 """
 Calculate the water balance for `Q` sampled at an interval of `dt` over the period `range`
 """
-waterbalance(Q,dt,range) = dot(dt/3.*Q[r],simpsonweights(length(r)))
+waterbalance(Q,dt,range) = dot(dt/3 .* Q[r],simpsonweights(length(r)))
 
 """
 Calculate the value of a Ljung-Box statistic for a model
