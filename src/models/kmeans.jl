@@ -47,7 +47,7 @@ StatsBase.coef(M::kMeansModel) = M.β
 StatsBase.nobs(M::kMeansModel) = length(M.Q)
 StatsBase.model_response(M::kMeansModel) = M.Q
 
-function StatsBase.predict(M::kMeansModel,H)
+function StatsBase.predict(M::kMeansModel, H::Matrix{Float64})
     clus = clusters(M,H)
     Q = zeros(size(H,2))
     for i in 1:length(Q)
