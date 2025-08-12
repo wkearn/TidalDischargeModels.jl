@@ -32,7 +32,7 @@ function validate(X::Matrix{Union{Missing, T}},range,n::Int) where {T <: Real}
     _,m = size(X)
     Y = zeros(T,n,m-i+1)
     for k in 1:n, j in i:m
-        Y[k,j-i+1] = get(X[k,j])
+        Y[k,j-i+1] = X[k,j]
     end
     Y
 end
