@@ -13,7 +13,7 @@ struct AdaptiveKernel <: VolterraKernel
     a::Vector{Float64}
 end
 
-(k::AdaptiveKernel)(h) = sum(k.a.^2.*[h^n for n in 0:length(k.a)-1])
+(k::AdaptiveKernel)(h) = sum(k.a.^2 .* [h^n for n in 0:length(k.a)-1])
 (k::AdaptiveKernel)(x1,x2) = k(dot(x1,x2))
 weights(k::AdaptiveKernel,n) = k.a[n+1]
 weights(k::AdaptiveKernel) = k.a
