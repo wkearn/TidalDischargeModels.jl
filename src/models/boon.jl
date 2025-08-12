@@ -1,4 +1,4 @@
-type BoonModel <: DischargeModel
+struct BoonModel <: DischargeModel
     M
     β
     H

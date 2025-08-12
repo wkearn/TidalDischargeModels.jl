@@ -9,7 +9,7 @@ InhomogeneousPolyKernel,
 GaussianKernel,
 VovkKernel
 
-immutable AdaptiveKernel <: VolterraKernel
+struct AdaptiveKernel <: VolterraKernel
     a::Vector{Float64}
 end
 
@@ -18,7 +18,7 @@ end
 weights(k::AdaptiveKernel,n) = k.a[n+1]
 weights(k::AdaptiveKernel) = k.a
 
-immutable InhomogeneousPolyKernel <: VolterraKernel
+struct InhomogeneousPolyKernel <: VolterraKernel
     p
 end
 
@@ -27,14 +27,14 @@ end
 weights(k::InhomogeneousPolyKernel,n) = binomial(k.p,n)
 weights(k::InhomogeneousPolyKernel) = [weights(k,n) for n in 0:p]
 
-immutable GaussianKernel <: VolterraKernel
+struct GaussianKernel <: VolterraKernel
 end
 
 (k::GaussianKernel)(h) = exp(h)
 (k::GaussianKernel)(x1,x2) = k(dot(x1,x2))
 weights(k::GaussianKernel,n) = 1/factorial(n)
 
-immutable VovkKernel <: VolterraKernel
+struct VovkKernel <: VolterraKernel
     α
 end
 
@@ -51,7 +51,7 @@ kernel_matrix(k::VolterraKernel,X1,X2) = map(k,X1'X2)
 kernel_matrix(k::VolterraKernel,X) = kernel_matrix(k,X,X)
 
 
-type VolterraModel <: DischargeModel
+struct VolterraModel <: DischargeModel
     M::Int
     k::VolterraKernel
     β::Vector{Float64}
@@ -85,7 +85,7 @@ StatsBase.predict(M::VolterraModel) = predict(M,M.H)
 StatsBase.residuals(M::VolterraModel) = M.Q-predict(M)
 StatsBase.residuals(M::VolterraModel,H,Q) = Q-predict(M,H)
 
-type RegularizedVolterraModel<: DischargeModel
+struct RegularizedVolterraModel<: DischargeModel
     M::Int
     k::VolterraKernel
     λ::Float64

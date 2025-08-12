@@ -1,6 +1,6 @@
 using Clustering, Distances
 
-type kMeansModel <: DischargeModel
+struct kMeansModel <: DischargeModel
     M::Int
     k::Int
     λ::Real

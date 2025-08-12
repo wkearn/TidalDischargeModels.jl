@@ -1,4 +1,4 @@
-type LTIModel <: DischargeModel
+struct LTIModel <: DischargeModel
     M::Int
     β::Vector{Float64}
     H::Matrix{Float64}
