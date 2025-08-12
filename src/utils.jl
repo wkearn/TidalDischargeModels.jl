@@ -49,5 +49,3 @@ function validate(x::AbstractVector,range,n::Int)
         return x[range]
     end 
 end
-
-include("statsutils.jl")
