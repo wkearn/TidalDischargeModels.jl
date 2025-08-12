@@ -14,7 +14,7 @@ kMeansModel(M,N,k=1,λ=0.0) = kMeansModel(M,k,λ,zeros(M,k),zeros(M,k),zeros(M,N
 
 function clusters(M::kMeansModel,H)
     D = pairwise(Euclidean(),H,M.centers)
-    map(x->ind2sub(size(D),x)[2],findmin(D,2)[2])
+    map(x-x[2], findmin(D, dims=2)[2])
 end
 
 function StatsBase.fit(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
