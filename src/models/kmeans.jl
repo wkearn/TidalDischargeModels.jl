@@ -1,4 +1,4 @@
-using Clustering, Distances
+using Clustering, Distances, LinearAlgebra
 
 struct kMeansModel <: DischargeModel
     M::Int
