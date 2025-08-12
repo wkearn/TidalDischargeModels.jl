@@ -32,36 +32,36 @@ the range given
 """
 abstract type DischargeModel <: RegressionModel end
 
-function estfun!(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64},range)
+function estfun!(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64},range)
     Ht = validate(H,range,model.M)
     Qt = validate(Q,range,model.M)
     fit!(model,Ht,Qt)
 end
 
-estfun!(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64}) = estfun!(model,H,Q,1:length(Q))
+estfun!(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = estfun!(model,H,Q,1:length(Q))
 
-function estfun(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64},range)
+function estfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64},range)
     Ht = validate(H,range,model.M)
     Qt = validate(Q,range,model.M)
     fit(model,Ht,Qt)
 end
 
-estfun(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64}) = estfun(model,H,Q,1:length(Q))
+estfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = estfun(model,H,Q,1:length(Q))
 
-function evalfun(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64},range)
+function evalfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64},range)
     Ht = validate(H,range,model.M)   
     Qt = validate(Q,range,model.M)
     sumabs2(residuals(model,Ht,Qt))
 end
 
-evalfun(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64}) = evalfun(model,H,Q,1:length(Q))
+evalfun(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalfun(model,H,Q,1:length(Q))
 
-function evalmodel(model::DischargeModel,H::Matrix{Nullable{Float64}},range)
+function evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},range)
     Ht = validate(H,range,model.M)
     predict(model,Ht)
 end
 
-evalmodel(model::DischargeModel,H::Matrix{Nullable{Float64}},Q::Vector{Float64}) = evalmodel(model,H,Q,1:length(Q))
+evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalmodel(model,H,Q,1:length(Q))
 
 """
 This is  the one argument form of fitting a discharge model
