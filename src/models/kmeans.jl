@@ -13,7 +13,7 @@ end
 kMeansModel(M,N,k=1,λ=0.0) = kMeansModel(M,k,λ,zeros(M,k),zeros(M,k),zeros(M,N),zeros(N))
 
 function clusters(M::kMeansModel,H)
-    D = pairwise(Euclidean(),H,M.centers)
+    D = pairwise(Euclidean(),H,M.centers, dims=2)
     map(x->x[2], findmin(D, dims=2)[2])
 end
 
