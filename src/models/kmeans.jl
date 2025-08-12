@@ -28,6 +28,14 @@ function StatsBase.fit(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
     kMeansModel(M.M,M.k,M.λ,km.centers,β,H,Q)
 end
 
+function StatsBase.fit(m::kMeansModel, h::Vector{Float64}, Q::Vector{Float64})
+    H = zeros(m.M, length(h) - m.M + 1)
+    for i in 1:m.M
+        H[m.M - i + 1, :] = h[i:end - m.M + i]
+    end
+    fit(m, H, Q[m.M:end])
+end
+
 function StatsBase.fit!(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
     km = kmeans(H,M.k,init=:kmcen,tol=1e-32)
     M.centers = km.centers
@@ -57,6 +65,17 @@ function StatsBase.predict(M::kMeansModel, H::Matrix{Float64})
 end
 
 StatsBase.predict(M::kMeansModel) = predict(M,M.H)
+
+function StatsBase.predict(m::kMeansModel, h::Vector{Float64})
+    Q = Array{Union{Missing, Float64}}(missing, length(h))
+    for i in m.M:length(h)
+        ht = h[i:-1:i-m.M+1]
+        D = colwise(Euclidean(),ht, m.centers)        
+        c = argmin(D)
+        Q[i] = dot(ht, m.β[:,c])
+    end
+    Q
+end
 
 StatsBase.residuals(M::kMeansModel) = M.Q-predict(M)
 StatsBase.residuals(M::kMeansModel,H,Q) = Q-predict(M,H)
