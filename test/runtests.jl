@@ -3,5 +3,6 @@ using Test
 
 include("data.jl")
 include("kmeans.jl")
+include("knn.jl")
 
                                       

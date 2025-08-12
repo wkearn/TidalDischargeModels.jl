@@ -95,7 +95,8 @@ const _models = ["lti",
                  "kmeans",
                  "volterra",
                  "threshold",
-                 "boon"]
+                 "boon",
+                 "knn"]
 for m in _models
     include(joinpath("models",m*".jl"))
 end
