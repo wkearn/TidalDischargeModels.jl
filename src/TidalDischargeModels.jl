@@ -2,7 +2,7 @@ module TidalDischargeModels
 
 using Reexport
 
-@reexport using Base.Dates, StatsBase, Optim, TidalFluxQuantities
+@reexport using Dates, StatsBase, Optim
 
 export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIModel, VolterraModel, RegularizedVolterraModel, kMeansModel, ThresholdModel, nash_sutcliffe, flatness, ρ, c_p
 
