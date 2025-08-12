@@ -1,4 +1,4 @@
-type ThresholdModel <: DischargeModel
+struct ThresholdModel <: DischargeModel
     M::Int
     k::Int
     f::Function

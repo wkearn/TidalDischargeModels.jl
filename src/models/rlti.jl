@@ -1,4 +1,4 @@
-type RegularizedLTIModel <: DischargeModel
+struct RegularizedLTIModel <: DischargeModel
     M::Int
     λ::Float64
     β::Vector{Float64}
