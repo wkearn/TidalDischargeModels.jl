@@ -5,22 +5,15 @@ Those points which do not have lags of that magnitude are set to Null.
 """
 function lagmatrix{T}(x::AbstractVector{T})
     n = length(x)
-    X = fill(Nullable{T}(),n,n)
+    X = zeros(Union{Missing, T}, n,n)
     for j in 1:n, i in 1:n
-        X[i,j] = j-i>=0 ? x[j-i+1] : Nullable()
-        end
+        X[i,j] = j-i>=0 ? x[j-i+1] : missing
+    end
     X
 end
 
-"""
-Create a lagmatrix for any given Quantity
-"""
-function makelagmatrix(q::Quantity)
-    lagmatrix(quantity(q))
-end
-
-function preparedata(p::Stage,d::Discharge,range,M)
-    H = makelagmatrix(p)
+function preparedata(p::Vector{Float64},d::Vector{Float64},range,M)
+    H = lagmatrix(p)
     Q = quantity(d)
     Hm = validate(H,range,M)
     Qm = validate(Q,range,M)
@@ -31,10 +24,10 @@ end
 Given a matrix formed by `lagmatrix`, a range of valid values desired and a number of lags,
 return those data points which are valid data
 """
-function validate{T}(X::Matrix{Nullable{T}},range,n::Int)
+function validate{T}(X::Matrix{Union{Missing, T}},range,n::Int)
     X = X[:,range]
     i = 1
-    while any(map(isnull,X[1:n,i]))
+    while any(map(ismissing,X[1:n,i]))
         i+=1
     end
     _,m = size(X)
