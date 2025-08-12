@@ -3,7 +3,7 @@ Takes a time series and produces a matrix containing all the possible lags.
 
 Those points which do not have lags of that magnitude are set to Null.
 """
-function lagmatrix{T}(x::AbstractVector{T})
+function lagmatrix(x::AbstractVector{T}) where {T <: Real}
     n = length(x)
     X = zeros(Union{Missing, T}, n,n)
     for j in 1:n, i in 1:n
@@ -23,7 +23,7 @@ end
 Given a matrix formed by `lagmatrix`, a range of valid values desired and a number of lags,
 return those data points which are valid data
 """
-function validate{T}(X::Matrix{Union{Missing, T}},range,n::Int)
+function validate(X::Matrix{Union{Missing, T}},range,n::Int) where {T <: Real}
     X = X[:,range]
     i = 1
     while any(map(ismissing,X[1:n,i]))
