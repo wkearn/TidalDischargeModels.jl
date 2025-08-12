@@ -61,7 +61,7 @@ function evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},rang
     predict(model,Ht)
 end
 
-evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}},Q::Vector{Float64}) = evalmodel(model,H,1:length(Q))
+evalmodel(model::DischargeModel,H::Matrix{Union{Missing, Float64}}, Q::Vector{Float64}, range=1:length(Q)) = evalmodel(model,H,range)
 
 """
 This is  the one argument form of fitting a discharge model
