@@ -1,0 +1,10 @@
+name = "TidalDischargeModels"
+uuid = "89b9f488-2a99-496c-a23e-9b21bc49cb1d"
+authors = ["William Kearney <will@wskearney.com>"]
+version = "0.1.0"
+
+[deps]
+Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
