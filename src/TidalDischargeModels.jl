@@ -6,8 +6,9 @@ using Reexport
 
 export estfun, estfun!, evalfun, evalmodel, BoonModel, LTIModel, RegularizedLTIModel, VolterraModel, RegularizedVolterraModel, kMeansModel, ThresholdModel, nash_sutcliffe, flatness, ρ, c_p
 
-include("dischargemodels.jl")
 include("utils.jl")
+include("dischargemodels.jl")
+include("statsutils.jl")
 include("constants.jl")
 
 end # module end
