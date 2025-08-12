@@ -9,4 +9,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Run tests
         run: |
-          julia --project -e "Pkg.test()"
+          julia --project -e "import Pkg; Pkg.test()"
