@@ -12,11 +12,25 @@ function lagmatrix(x::AbstractVector{T}) where {T <: Real}
     X
 end
 
-function preparedata(p::Vector{Float64},d::Vector{Float64},range,M)
-    H = lagmatrix(p)
-    Hm = validate(H,range,M)
-    Qm = validate(Q,range,M)
-    Hm,Qm
+function lagmatrix(x::AbstractVector{T}, lag) where T
+    n = length(x)
+    Tm = nonmissingtype(T)
+    X = Array{Union{Missing, Tm}}(missing, lag, length(x))
+    for i in 1:lag
+        X[lag - i + 1, lag - i + 1:end] = x[1:end-lag + i]
+    end
+    X
+end
+
+function preparedata(h::AbstractVector{T}, q::AbstractVector{S}, lag) where {S, T}
+    H = lagmatrix(h, lag)
+
+    # Filter out missing data
+    mask = .!(vec(any(ismissing.(H), dims=1)) .| ismissing.(q))
+    H = convert(Matrix{nonmissingtype(T)}, H[:,mask])
+    Q = convert(Vector{nonmissingtype(S)}, q[mask])
+    
+    (;H, Q)
 end
 
 """
