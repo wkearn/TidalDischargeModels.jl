@@ -22,12 +22,12 @@ function StatsBase.fit(m::KNNModel, H::Matrix{Float64}, Q::Vector{Float64})
     KNNModel(m.M, m.k, KDTree(H), Q, zeros(Int, m.k), zeros(Float64, m.k))
 end
 
-function StatsBase.fit(m::KNNModel, h::Vector{Float64}, Q::Vector{Float64})
-    H = zeros(m.M, length(h) - m.M + 1)
-    for i in 1:m.M
-        H[i, :] = h[i:end - m.M + i]
+function StatsBase.fit(::Type{KNNModel}, h::Vector{Float64}, Q::Vector{Float64}; M=1, k=1)
+    H = zeros(M, length(h) - M + 1)
+    for i in 1:M
+        H[M - i + 1, :] = h[i:end - M + i]
     end
-    KNNModel(m.M, m.k, KDTree(H), Q[m.M:end], zeros(Int, m.k), zeros(Float64, m.k))
+    KNNModel(M, k, KDTree(H), Q[M:end], zeros(Int, k), zeros(Float64, k))
 end
 
 StatsBase.predict(m::KNNModel) = predict(m, m.t.data)

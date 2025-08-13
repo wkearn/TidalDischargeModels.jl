@@ -28,12 +28,20 @@ function StatsBase.fit(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
     kMeansModel(M.M,M.k,M.λ,km.centers,β,H,Q)
 end
 
-function StatsBase.fit(m::kMeansModel, h::Vector{Float64}, Q::Vector{Float64})
-    H = zeros(m.M, length(h) - m.M + 1)
-    for i in 1:m.M
-        H[m.M - i + 1, :] = h[i:end - m.M + i]
+function StatsBase.fit(::Type{kMeansModel}, h::Vector{Float64}, Q::Vector{Float64}; M=1, k=1, λ=0.0)
+    H = zeros(M, length(h) - M + 1)
+    for i in 1:M
+        H[M - i + 1, :] = h[i:end - M + i]
     end
-    fit(m, H, Q[m.M:end])
+    Qt = Q[M:end]
+    km = kmeans(H,k,init=:kmcen,tol=1e-32)
+    β = zeros(M,k)
+    for i in 1:k
+        Hi = H[:,assignments(km).==i]
+        Qi = Qt[assignments(km).==i]
+        β[:,i] = (Hi*Hi'+λ*I)\(Hi*Qi)
+    end
+    kMeansModel(M,k,λ,km.centers,β,H,Qt)
 end
 
 function StatsBase.fit!(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
