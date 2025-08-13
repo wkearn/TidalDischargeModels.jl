@@ -11,8 +11,6 @@ struct KNNModel <: DischargeModel
     dist::Vector{Float64}    
 end
 
-KNNModel(M, k) = KNNModel(M, k, nothing, Float64[], zeros(Int, k), zeros(Float64, k))
-
 function StatsBase.fit!(m::KNNModel, H::Matrix{Float64}, Q::Vector{Float64})
     m.t = KDTree(H)
     m.Q = Q
