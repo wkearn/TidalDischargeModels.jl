@@ -20,32 +20,32 @@ function StatsBase.fit(m::KNNModel, H::Matrix{Float64}, Q::Vector{Float64})
     KNNModel(m.M, m.k, KDTree(H), Q, zeros(Int, m.k), zeros(Float64, m.k))
 end
 
-function StatsBase.fit(::Type{KNNModel}, h::Vector{Float64}, Q::Vector{Float64}; M=1, k=1)
-    H = zeros(M, length(h) - M + 1)
-    for i in 1:M
-        H[M - i + 1, :] = h[i:end - M + i]
-    end
-    KNNModel(M, k, KDTree(H), Q[M:end], zeros(Int, k), zeros(Float64, k))
+function StatsBase.fit(::Type{KNNModel},
+                       h::AbstractVector{S},
+                       q::AbstractVector{T};
+                       M=1, k=1) where {S, T}
+    H,Q = preparedata(h, q, M)
+    KNNModel(M, k, KDTree(H), Q, zeros(Int, k), zeros(Float64, k))
 end
 
-StatsBase.predict(m::KNNModel) = predict(m, m.t.data)
+StatsBase.predict(m::KNNModel) = predict(m, reduce(hcat, m.t.data))
 
-function StatsBase.predict(m::KNNModel, H::Matrix{Float64})
-    Qp = zeros(size(H, 2))
+function StatsBase.predict(m::KNNModel, H::Matrix{T}) where T
+    Qp = Array{Union{Missing, Float64}}(missing, size(H, 2))
     for i in axes(H, 2)
-        knn!(m.idx, m.dist, m.t, H[:, i], m.k)
-        Qp[i] = mean(m.Q[m.idx])
+        h = H[:, i]
+        if !any(ismissing, h)
+            h = convert(Vector{nonmissingtype(T)}, h)
+            knn!(m.idx, m.dist, m.t, h, m.k)
+            Qp[i] = mean(m.Q[m.idx])
+        end
     end
     Qp
 end
 
-function StatsBase.predict(m::KNNModel, h::Vector{Float64})
-    Qp = Array{Union{Missing,Float64}}(missing, length(h))
-    for i in m.M:length(h)
-        knn!(m.idx, m.dist, m.t, h[i-m.M+1:i], m.k)
-        Qp[i] = mean(m.Q[m.idx])
-    end
-    Qp
+function StatsBase.predict(m::KNNModel, h::AbstractVector{T}) where T
+    H = lagmatrix(h, m.M)
+    predict(m, H)
 end
 
 StatsBase.residuals(m::KNNModel) = m.Q - predict(m)

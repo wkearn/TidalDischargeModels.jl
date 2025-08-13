@@ -70,11 +70,6 @@ StatsBase.fit(M::DischargeModel, Y::Matrix{Float64}) = fit(M,Y[1:end-1,:],vec(Y[
 
 StatsBase.fit!(M::DischargeModel,Y::Matrix{Float64}) = fit!(M,Y[1:end-1,:],vec(Y[end,:]))
 
-function StatsBase.predict(model::M, h::Vector{Float64}) where {M <: DischargeModel}
-    Ht = validate(lagmatrix(h), 1:length(h), model.M)
-    predict(model, Ht)
-end
-
 # Functions for fitting from a Discharge type
 
 estfun!(M::DischargeModel,h::Vector{Float64},dd::Vector{Float64},range) = estfun!(M,lagmatrix(h),dd,range)

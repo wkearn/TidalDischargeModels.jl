@@ -26,20 +26,20 @@ function StatsBase.fit(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
     kMeansModel(M.M,M.k,M.λ,km.centers,β,H,Q)
 end
 
-function StatsBase.fit(::Type{kMeansModel}, h::Vector{Float64}, Q::Vector{Float64}; M=1, k=1, λ=0.0)
-    H = zeros(M, length(h) - M + 1)
-    for i in 1:M
-        H[M - i + 1, :] = h[i:end - M + i]
-    end
-    Qt = Q[M:end]
+function StatsBase.fit(::Type{kMeansModel},
+                       h::AbstractVector{S},
+                       q::AbstractVector{T};
+                       M=1, k=1, λ=0.0) where {S, T}
+    H,Q = preparedata(h, q, M)
+
     km = kmeans(H,k,init=:kmcen,tol=1e-32)
     β = zeros(M,k)
     for i in 1:k
         Hi = H[:,assignments(km).==i]
-        Qi = Qt[assignments(km).==i]
+        Qi = Q[assignments(km).==i]
         β[:,i] = (Hi*Hi'+λ*I)\(Hi*Qi)
     end
-    kMeansModel(M,k,λ,km.centers,β,H,Qt)
+    kMeansModel(M,k,λ,km.centers,β,H,Q)
 end
 
 function StatsBase.fit!(M::kMeansModel,H::Matrix{Float64},Q::Vector{Float64})
@@ -72,13 +72,16 @@ end
 
 StatsBase.predict(M::kMeansModel) = predict(M,M.H)
 
-function StatsBase.predict(m::kMeansModel, h::Vector{Float64})
+function StatsBase.predict(m::kMeansModel, h::AbstractVector{T}) where T
     Q = Array{Union{Missing, Float64}}(missing, length(h))
     for i in m.M:length(h)
         ht = h[i:-1:i-m.M+1]
-        D = colwise(Euclidean(),ht, m.centers)        
-        c = argmin(D)
-        Q[i] = dot(ht, m.β[:,c])
+        if !any(ismissing, ht)
+            ht = convert(Vector{nonmissingtype(T)},ht)
+            D = colwise(Euclidean(), ht, m.centers)
+            c = argmin(D)
+            Q[i] = dot(ht, m.β[:,c])
+        end
     end
     Q
 end
