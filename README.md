@@ -12,74 +12,90 @@ To install, first make sure you have a working installation of [Julia v0.5 on yo
 
 # Installation
 
-## Dependencies
-
-TidalDischargeModels.jl depends on the currently unregistered [TidalFluxQuantities.jl](https://github.com/wkearn/TidalFluxQuantities.jl), which you will need to install manually.
-
-From a Julia prompt:
+From the Julia prompt, type `]` to enter the package prompt, then add
+the TidalDischargeModels.jl package from its address on GitHub:
 
 ```julia
-julia> Pkg.clone("https://github.com/wkearn/TidalFluxQuantities.jl")
+pkg> add https://github.com/wkearn/TidalDischargeModels
 ```
 
-If you want to run the tests, you'll also need to install [PIEMetData.jl](https://github.com/wkearn/PIEMetData.jl), [ADCPDataProcessing.jl](https://github.com/wkearn/ADCPDataProcessing.jl) and [TidalFluxExampleData.jl](https://github.com/wkearn/TidalFluxExampleData.jl)
+This should install the necessary dependencies and
+TidalDischargeModels. Once the installation completes, type a
+backspace to get back to the Julia prompt and import the package
 
 ```julia
-julia> Pkg.clone("https://github.com/wkearn/PIEMetData.jl")
-julia> Pkg.clone("https://github.com/wkearn/ADCPDataProcessing.jl")
-julia> Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl")
+julia> using TidalDischargeModels
 ```
 
-## Package installation
+# Usage
 
-From the Julia prompt:
+The basic interface for fitting a model is provided through the `fit` function:
 
 ```julia
-julia> Pkg.clone("https://github.com/wkearn/TidalDischargeModels")
+julia> m = fit(KNNModel, h, q, M = 10, k = 25)
 ```
 
-I have included in the package a few modules which I use to manage acoustic Doppler current profiler data and get it into a form that lets me fit the models. You don't need to use my data management system to fit the models, however, so you can ignore all the code in the files `src/ADCPTypes.jl`, `src/ADCPDataStructures.jl`, and `src/MetData.jl`.
-
-All you need to fit a discharge model is an instance of the `TidalFluxQuantities` type and an instance of the `DischargeModel` type. The `TidalFluxQuantities` basically holds stage and discharge data in two vectors. There are also vectors within the type to hold the measurement times, the cross-sectional area of the channel and the average velocity measured in the channel. You can construct a `TidalFluxQuantities` instance by
+and a fitted model can be applied to a new stage time series with `predict`:
 
 ```julia
-julia> d = TidalFluxQuantities(H,T,V,A,Q)
+julia> predict(m, h_test)
 ```
 
-where `H`, `T`, `V`, `A`, and `Q` are the vectors of stage, measurement times (as Julia `DateTime`s), average velocity, area and discharge. If you don't have the time, velocity and area vectors, you can still fit a `DischargeModel`, so I've provided a convenience method which lets you construct a `TidalFluxQuantities` using only the stage and discharge vectors:
+The first argument to `fit` is the name of a model. At the moment only
+a k-nearest neighbors model, `KNNModel`, and a k-means model
+`kMeansModel` are supported through this interface. The second and
+third options are vectors containing stage and discharge data,
+respectively. You should obtain these from your data in whatever way
+makes the most sense. If you have data in a CSV file with columns for
+"Stage" and "Discharge", for example, you can use
 
 ```julia
-julia> d = TidalFluxQuantities(H,Q)
+julia> using CSV, DataFrames
+julia> df = CSV.read("data.csv")
+julia m = fit(KNNModel, df[!, :Stage], df[!, :Discharge], M = 10, k = 25)
 ```
 
-Once you have your training data in the form of a `TidalFluxQuantities`, you need to construct a `DischargeModel`. There are currently seven different subtypes of `DischargeModel`:
+The `test/` directory contains some example data from the USGS and the
+`test/data.jl` script shows how these can be loaded into julia.
 
-- `BoonModel`
-- `LTIModel`
-- `RegularizedLTIModel`
-- `VolterraModel`
-- `RegularizedVolterraModel`
-- `kMeansModel`
-- `ThresholdModel`
+The model hyperparameters are set with keyword arguments. All models
+take an argument `M`, which stands for the number of previous timesteps
+of the stage that are considered when modeling the discharge.
 
-Each model has a set of hyperparameters which you set in the instance you create before you fit. For example, the `RegularizedVolterraModel` has a parameter `M` for the number of lagged values of stage it looks at, a parameter `k` which determines the maximum polynomial order of the Volterra series expansion, and a parameter `λ` for the regularization strength. You'll also want a guess at the size of the training data set, `N`. It isn't critical if you don't know it at first, but creating a `RegularizedVolterraModel` will allocate enough memory to hold a training data set of size `N`. Now you can create your `DischargeModel`:
+`kMeansModel` and `KNNModel` both take a parameter `k`, which stands
+for the number of clusters in the `kMeansModel` and the number of
+neighbors to consider in the `KNNModel`.
+
+The `kMeansModel` also takes a parameter `λ` (you can type this at the
+Julia prompt using LaTeX completion: type "\lambda" and then hit
+TAB). This is a regularization parameter that makes the fitted model
+less sensitive to the data. If you run into a `SingularException` when
+fitting the `kMeansModel`, you should increase `λ`.
+
+The model fitting will still work if there are missing values in the
+stage or discharge data. Missing discharge data points are discarded
+during fitting. A window of size `M` following a missing stage data
+point is discarded because those points do not have complete stage
+trajectories.
+
+Prediction will also work with missing stage data, but time steps
+whose prediction depends on a missing stage data point will be labeled
+as missing.
+
+If you would like to fit a model to multiple time series, you can pass
+the data as a vector of vectors:
 
 ```julia
-julia> model = RegularizedVolterraModel(M,N,k,λ)
+julia> m = fit(KNNModel, [h1, h2, h3], [q1, q2, q3], M=10, k=25)
 ```
 
-To fit the model to a `TidalFluxQuantities` we use the `estfun` helper function:
+Do not concatenate the time series into a single vector and fit the
+model to that vector. If you do this, the lagged stage values used at
+the beginning of the second time series will come from the first time
+series, which is almost certainly not what you want. Pass a vector of
+vectors to the `fit` function instead, and it will handle the
+processing of these data correctly.
 
-```julia
-julia> volterra = estfun(model,d)
-```
 
-remembering our `TidalFluxQuantities` `d` from before. Wait for the model to fit, and now `volterra` is a fit `RegularizedDischargeModel`. If you have a test data set wrapped in another `TidalFluxQuantities`, say `d2`, you can estimate discharge for that test data set using `evalmodel`:
 
-```julia
-julia> Qt = evalmodel(volterra,d2)
-```
 
-There are lots of other tricks to getting this to work right, especially cross-validation, and I hope to add some documentation covering these methods soon. This code should work, but it is in a constant state of being cleaned up and expanded, so let me know by opening an issue on this repository if there is something you need or if something doesn't work the way you expect it to.
-
-Some tests are included in the `test` directory, but these won't currently work unless you have my data on your system. I'll get an example data set up soon.
