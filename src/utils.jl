@@ -22,7 +22,11 @@ function lagmatrix(x::AbstractVector{T}, lag) where T
     X
 end
 
-function preparedata(h::AbstractVector{T}, q::AbstractVector{S}, lag) where {S, T}
+function preparedata(h::AbstractVector{S}, q::AbstractVector{T}, lag) where {
+    S <: Union{Missing, Real},
+    T <: Union{Missing, Real}
+    }
+
     H = lagmatrix(h, lag)
 
     # Filter out missing data
@@ -31,6 +35,23 @@ function preparedata(h::AbstractVector{T}, q::AbstractVector{S}, lag) where {S, 
     Q = convert(Vector{nonmissingtype(S)}, q[mask])
     
     (;H, Q)
+end
+
+function preparedata(
+    h::AbstractVector{U},
+    q::AbstractVector{V},
+    lag
+    ) where {
+        U <: AbstractVector,
+        V <: AbstractVector,
+    }
+
+    @assert length(h) == length(q) "Outer vectors must be the same length"
+    @assert map(length, h) == map(length, q) "Inner vectors must each be the same length"
+
+    ds = map(x->preparedata(x[1], x[2], lag), zip(h, q))
+    (; H = mapreduce(x->x.H, hcat, ds),
+       Q = mapreduce(x->x.Q, vcat, ds))
 end
 
 """

@@ -27,3 +27,13 @@ end
     @test count(ismissing, Qpp) == 5
 end
 
+@testset "KNNModel with multiple data sets" begin
+    h1 = randn(200)
+    q1 = randn(200)
+    h2 = randn(200)
+    q2 = randn(200)
+
+    m0 = fit(KNNModel, [h1, h2], [q1, q2], M=10, k=10)
+
+    @assert length(m0.Q) == 400 - 18
+end
