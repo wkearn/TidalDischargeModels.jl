@@ -52,7 +52,7 @@ makes the most sense. If you have data in a CSV file with columns for
 ```julia
 julia> using CSV, DataFrames
 julia> df = CSV.read("data.csv")
-julia m = fit(KNNModel, df[!, :Stage], df[!, :Discharge], M = 10, k = 25)
+julia> m = fit(KNNModel, df[!, :Stage], df[!, :Discharge], M = 10, k = 25)
 ```
 
 The `test/` directory contains some example data from the USGS and the
